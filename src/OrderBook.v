@@ -14,17 +14,10 @@ module OrderBook #(
   input      [ID_BITS-1:0]      order_id_in,
   output reg [DATA_BITS-1:0]    size_out
 );
-
-  // --------------------------------------------------------------------------
-  // 1) Declare the RAM arrays WITHOUT any reset loop:
-  //    This lets your tool infer real BRAM blocks.
-  // --------------------------------------------------------------------------
+  
   reg [DATA_BITS-1:0] price_ram [0:MAX_ORDER-1];
   reg [DATA_BITS-1:0] size_ram  [0:MAX_ORDER-1];
 
-  // --------------------------------------------------------------------------
-  // 2) Synchronous readback of size_out, with an async reset only for size_out.
-  // --------------------------------------------------------------------------
   always @(posedge clk or negedge rst_n) begin
     if (!rst_n) begin
       size_out <= {DATA_BITS{1'b0}};
@@ -34,10 +27,6 @@ module OrderBook #(
     end
   end
 
-  // --------------------------------------------------------------------------
-  // 3) Separate process to do BRAM writes (no resets here).
-  //    All writes use non-blocking <= so they happen in BRAM.
-  // --------------------------------------------------------------------------
   always @(posedge clk) begin
     if (ADD) begin
       price_ram[order_id_in] <= price_in;
