@@ -89,7 +89,7 @@ module Top #(
         .size_out(size_out)
         );
 
-  //--- LEDs (same as before) …
+  //--- LEDs
   always @(posedge clk or negedge rst_n) begin
     if (!rst_n) 
     begin
